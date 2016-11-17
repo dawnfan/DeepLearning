@@ -102,6 +102,7 @@ def rnn_forward(x, h0, Wx, Wh, b):
   ##############################################################################
   N, T, D = x.shape
   _, H = h0.shape
+  # initialize the size
   h = np.zeros((N, T, H))
   cache = []
   temp_prev = h0
@@ -179,7 +180,14 @@ def word_embedding_forward(x, W):
   #                                                                            #
   # HINT: This should be very simple.                                          #
   ##############################################################################
-  pass
+  N, T = x.shape
+  V, D = W.shape
+  # initialization
+  out = np.zeros((N, T, D))
+  for n in xrange(N):
+    for t in xrange(T):
+      out[n, t, :] = W[x[n, t],:]
+  cache = x, W
   ##############################################################################
   #                               END OF YOUR CODE                             #
   ##############################################################################
@@ -207,7 +215,11 @@ def word_embedding_backward(dout, cache):
   #                                                                            #
   # HINT: Look up the function np.add.at                                       #
   ##############################################################################
-  pass
+  x, W = cache
+  V, D = W.shape
+  dW = np.zeros((V, D))
+  # set the value of dW
+  np.add.at(dW, x, dout)
   ##############################################################################
   #                               END OF YOUR CODE                             #
   ##############################################################################
